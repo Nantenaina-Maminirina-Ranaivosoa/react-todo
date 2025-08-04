@@ -10,10 +10,29 @@ function App() {
 
   const [input, setInput] = useState("");
 
+  const handleAddTask = (e) => {
+    e.preventDefault();
+    if (input.trim() === "") return;
+
+    const newTask = {
+      id: Date.now(),
+      text: input,
+    };
+
+    setTasks([...tasks, newTask]);
+
+    setInput("");
+  };
+
+  const handleDeleteTask = (idToDelete) => {
+    const updatedTasks = tasks.filter(task => task.id !== idToDelete);
+    setTasks(updatedTasks);
+  };
+
   return (
     <div className="todo-container">
       <h1>Ma To-do List</h1>
-      <form className="todo-form">
+      <form className="todo-form" onSubmit={handleAddTask}>
         <input
           type="text"
           placeholder="Ajouter une nouvelle tache..."
@@ -24,11 +43,13 @@ function App() {
       </form>
 
       <ul className="task-list">
-        {tasks.map(task => (
-        <li key={task.id}>
-          <span>{task.text}</span>
-          <button className="delete-btn">Supprimer</button>
-        </li>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <span>{task.text}</span>
+            <button className="delete-btn" onClick={() => handleDeleteTask(task.id)}>
+              Supprimer
+            </button>
+          </li>
         ))}
       </ul>
     </div>
